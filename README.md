@@ -2,19 +2,29 @@
 
 In-page floating tool to bulk delete your posts, undo reposts, and unlike tweets on X (Twitter).
 
-Works without opening DevTools, inspecting network traffic, or copying authentication tokens.
+No DevTools, no token copying, no external servers. Everything runs inside your browser session on the account you are logged into.
+
+## Before you use this
+
+Deletion is final. X gives you no way to restore a deleted post, an undone repost, or a removed like. Once it is gone, it is gone.
+
+XCleaner only acts on the account currently logged in in your browser. You choose the filters, you press start, and you are responsible for what gets cleaned. Read the panel options before running a pass.
+
+X rate limits apply. The script backs off automatically when it hits HTTP 429 and pauses until it can continue. That is expected, not a failure.
+
+If you might regret losing something, keep a copy first. Export your archive from X settings, or save the posts you care about, before you start.
 
 ## Features
 
 * Bulk delete your posts and replies
 * Bulk undo reposts (unretweet)
 * Bulk unlike liked tweets
-* Date range filters (only before or after a given date)
+* Date range filters (From / To)
 * Keep pinned posts safe
 * Only delete posts containing links or media
 * Whitelist specific post IDs from deletion
-* Automatic backoff and resume on X rate limits (HTTP 429)
-* Runs entirely inside your browser session, zero external servers
+* Automatic backoff on X rate limits (HTTP 429)
+* Live log with progress, pause, and stop controls
 
 ## Installation
 
@@ -42,7 +52,7 @@ After install, you will see the manager icon in your toolbar.
 2. Your manager will open an install page. Click **Install**.
 3. If no prompt appears, open the manager Dashboard > Utilities > Import from URL, paste the link above, then Install.
 
-The manager will keep XCleaner updated automatically.
+The manager keeps XCleaner updated automatically from that same URL.
 
 ### 3. Use it
 
@@ -58,17 +68,20 @@ Build the userscript bundle:
 node build.js
 ```
 
-Generated output:
+Output:
 * `dist/xcleaner.user.js` (single-file userscript)
 
-A daily GitHub Actions workflow automatically checks X GraphQL endpoint IDs and updates `src/core/ids.json` if changes are detected.
+X exposes GraphQL query IDs that change over time. A daily GitHub Actions workflow (`.github/workflows/sync-ids.yml`) checks them and updates `src/core/ids.json` when a change is detected.
 
 ## Credits
 
-Based on earlier scripts by:
-* [Lyfhael/DeleteTweets](https://github.com/Lyfhael/DeleteTweets)
-* [Lyfhael/UnlikeAllTweets](https://github.com/Lyfhael/UnlikeAllTweets)
+Big thanks to Lyfhael. XCleaner exists because these two scripts came first:
+
+* [DeleteTweets](https://github.com/Lyfhael/DeleteTweets)
+* [UnlikeAllTweets](https://github.com/Lyfhael/UnlikeAllTweets)
+
+XCleaner builds on that work. The original MIT license text is carried in [LICENSE](LICENSE), covering Lyfhael (2023) and Sayskh (2026).
 
 ## License
 
-MIT
+MIT. You can use, modify, and redistribute it. See [LICENSE](LICENSE) for the full text and copyright notices.
