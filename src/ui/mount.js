@@ -1,6 +1,19 @@
 // Mount logic: injects FAB + panel into x.com page
 // Uses globals: IDS, PANEL_HTML, PANEL_CSS, mountXCleaner (defined by build.js inlining)
 
+function detectTheme() {
+  const cls = document.documentElement.classList;
+  if (cls.contains('dark')) return 'dark';
+  if (cls.contains('light')) return 'light';
+  return null;
+}
+
+function applyTheme(panel) {
+  const theme = detectTheme();
+  if (theme) panel.setAttribute('data-xc-theme', theme);
+  else panel.removeAttribute('data-xc-theme');
+}
+
 function injectFloatingUI() {
   if (document.getElementById('xcleaner-fab') || document.getElementById('xcleaner-root')) return;
 
@@ -11,10 +24,12 @@ function injectFloatingUI() {
 
   const fab = document.createElement('button');
   fab.id = 'xcleaner-fab';
-  fab.textContent = 'XC';
+  fab.type = 'button';
   fab.setAttribute('aria-label', 'Open XCleaner');
-  fab.style.cssText =
-    'position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:9999px;background:#0f1419;color:#ffffff;border:1px solid #2f3336;z-index:99998;cursor:pointer;font-weight:700;font-size:16px;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+  fab.setAttribute('aria-expanded', 'false');
+  fab.innerHTML =
+    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+    '<path d="M4 7h16M4 12h10M4 17h16"/><path d="M17 10l4 4M21 10l-4 4"/></svg>';
   document.body.appendChild(fab);
 
   const container = document.createElement('div');
@@ -24,9 +39,17 @@ function injectFloatingUI() {
 
   const panel = container.querySelector('#xcleaner-root');
   panel.style.display = 'none';
+  applyTheme(panel);
+
+  // Follow x.com theme changes (SPA theme toggle, no reload)
+  const rootEl = document.documentElement;
+  const observer = new MutationObserver(() => applyTheme(panel));
+  observer.observe(rootEl, { attributes: true, attributeFilter: ['class'] });
 
   fab.addEventListener('click', () => {
-    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    const open = panel.style.display === 'none';
+    panel.style.display = open ? 'flex' : 'none'; // flex preserves pinned footer layout
+    fab.setAttribute('aria-expanded', String(open));
   });
 
   mountXCleaner(container, IDS);

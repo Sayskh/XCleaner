@@ -60,6 +60,8 @@ export function mountXCleaner(containerEl, ids, options = {}) {
 
     setBanner(null);
     logBox.textContent = '';
+    const logDetails = logBox.closest('details');
+    if (logDetails) logDetails.open = true;
     progressSection.style.display = 'flex';
     btnStart.style.display = 'none';
     btnPause.style.display = 'block';

@@ -1,82 +1,122 @@
-<!-- Vanilla Floating Panel Template for XCleaner -->
+<!-- XCleaner Floating Panel — Native Clean -->
 <div id="xcleaner-root" role="dialog" aria-labelledby="xc-title-text" aria-modal="false">
   <div class="xc-header">
-    <div class="xc-title" id="xc-title-text">XCleaner</div>
+    <div class="xc-header-main">
+      <div class="xc-title" id="xc-title-text">XCleaner</div>
+      <div class="xc-subtitle">Bulk clean posts · reposts · likes</div>
+    </div>
     <button class="xc-close" id="xc-btn-close" aria-label="Close XCleaner panel" type="button">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M10.59 12L5 6.41 6.41 5 12 10.59 17.59 5 19 6.41 13.41 12 19 17.59 17.59 19 12 13.41 6.41 19 5 17.59 10.59 12z"/>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6L18 18M18 6L6 18"/>
       </svg>
     </button>
   </div>
 
   <div class="xc-body">
-    <!-- State notice (Empty / Rate limit / Error / Success) -->
+    <!-- Status -->
     <div id="xc-status-banner" class="xc-status" style="display: none;" role="status" aria-live="polite"></div>
 
-    <!-- Target Action Selector -->
-    <fieldset class="xc-group" style="border: none; padding: 0; margin: 0;">
-      <legend class="xc-label">Items to Clean</legend>
-      <label class="xc-checkbox">
-        <input type="checkbox" id="xc-opt-posts" checked>
-        <span>Delete my posts and replies</span>
-      </label>
-      <label class="xc-checkbox">
-        <input type="checkbox" id="xc-opt-unretweet" checked>
-        <span>Undo reposts (unretweet)</span>
-      </label>
-      <label class="xc-checkbox">
-        <input type="checkbox" id="xc-opt-unlike">
-        <span>Unlike liked posts</span>
-      </label>
+    <!-- 01 — What to clean -->
+    <fieldset class="xc-section">
+      <legend class="xc-section-title">What to clean</legend>
+      <div class="xc-check-stack">
+        <label class="xc-check">
+          <input type="checkbox" id="xc-opt-posts" checked>
+          <span class="xc-check-text">
+            <span class="xc-check-label">Delete my posts and replies</span>
+            <span class="xc-check-hint">Includes original posts and replies</span>
+          </span>
+        </label>
+        <label class="xc-check">
+          <input type="checkbox" id="xc-opt-unretweet" checked>
+          <span class="xc-check-text">
+            <span class="xc-check-label">Undo reposts</span>
+            <span class="xc-check-hint">Removes your reposts (unretweet)</span>
+          </span>
+        </label>
+        <label class="xc-check">
+          <input type="checkbox" id="xc-opt-unlike">
+          <span class="xc-check-text">
+            <span class="xc-check-label">Unlike liked posts</span>
+            <span class="xc-check-hint">Only removes likes, not the posts</span>
+          </span>
+        </label>
+      </div>
     </fieldset>
 
-    <!-- Filters -->
-    <div class="xc-group">
-      <label class="xc-label" for="xc-date-after">Date Range (Optional)</label>
-      <div style="display: flex; gap: 8px;">
-        <input type="date" id="xc-date-after" class="xc-input" aria-label="Only after date">
-        <input type="date" id="xc-date-before" class="xc-input" aria-label="Only before date">
+    <div class="xc-divider" aria-hidden="true"></div>
+
+    <!-- 02 — Filters -->
+    <div class="xc-section">
+      <div class="xc-section-title">Filters</div>
+
+      <div class="xc-field">
+        <div class="xc-field-head">
+          <span class="xc-field-label">Date range</span>
+          <span class="xc-field-optional">optional</span>
+        </div>
+        <div class="xc-field-desc">Only posts within this window will be touched. Leave blank for all time.</div>
+        <div class="xc-date-grid">
+          <label class="xc-date-field" for="xc-date-after">
+            <span class="xc-date-label">From</span>
+            <input type="date" id="xc-date-after" class="xc-input" aria-label="Only after date">
+          </label>
+          <label class="xc-date-field" for="xc-date-before">
+            <span class="xc-date-label">To</span>
+            <input type="date" id="xc-date-before" class="xc-input" aria-label="Only before date">
+          </label>
+        </div>
       </div>
-    </div>
 
-    <div class="xc-group">
-      <label class="xc-checkbox">
-        <input type="checkbox" id="xc-opt-pinned" checked>
-        <span>Keep pinned post safe</span>
+      <div class="xc-check-stack xc-check-stack--compact">
+        <label class="xc-check xc-check--simple">
+          <input type="checkbox" id="xc-opt-pinned" checked>
+          <span class="xc-check-label">Keep pinned post</span>
+        </label>
+        <label class="xc-check xc-check--simple">
+          <input type="checkbox" id="xc-opt-urlonly">
+          <span class="xc-check-label">Only posts with links or media</span>
+        </label>
+      </div>
+
+      <label class="xc-field" for="xc-whitelist-ids">
+        <span class="xc-field-label">Keep specific Post IDs</span>
+        <input type="text" id="xc-whitelist-ids" class="xc-input" placeholder="1840000000000000000, 1840000000000000001">
+        <span class="xc-hint">Comma-separated. These IDs are never deleted.</span>
       </label>
-      <label class="xc-checkbox">
-        <input type="checkbox" id="xc-opt-urlonly">
-        <span>Only delete posts with links or media</span>
-      </label>
     </div>
 
-    <div class="xc-group">
-      <label class="xc-label" for="xc-whitelist-ids">Keep specific Post IDs (Comma-separated)</label>
-      <input type="text" id="xc-whitelist-ids" class="xc-input" placeholder="1840000000000000000, 1840000000000000001">
-    </div>
-
-    <!-- Progress indicator -->
+    <!-- Progress -->
     <div class="xc-progress" id="xc-progress-section" style="display: none;">
-      <div style="display: flex; justify-content: space-between; font-size: 12px;">
-        <span id="xc-progress-summary">Scanned: 0</span>
-        <span id="xc-progress-actions">Deleted: 0</span>
+      <div class="xc-progress-head">
+        <span id="xc-progress-summary" class="xc-progress-stat">Scanned: 0</span>
+        <span id="xc-progress-actions" class="xc-progress-stat">Deleted: 0</span>
       </div>
       <div class="xc-progress-bar">
         <div class="xc-progress-fill" id="xc-progress-fill"></div>
       </div>
     </div>
 
-    <!-- Execution log -->
-    <div class="xc-group">
-      <label class="xc-label" for="xc-log-box">Activity Log</label>
-      <div id="xc-log-box" class="xc-log" role="log" aria-live="polite">Ready. Choose options and click Start.</div>
-    </div>
+    <!-- Log — collapsed by default, secondary -->
+    <details class="xc-log-group">
+      <summary class="xc-log-summary">
+        <span class="xc-log-summary-label">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
+          Activity log
+        </span>
+        <span class="xc-log-summary-hint">expand</span>
+      </summary>
+      <div id="xc-log-box" class="xc-log" role="log" aria-live="polite">Ready. Choose options and click Start cleaning.</div>
+    </details>
+  </div>
 
-    <!-- Action Buttons -->
+  <!-- Pinned action bar — never scrolls away -->
+  <div class="xc-footer">
     <div class="xc-actions">
-      <button type="button" id="xc-btn-start" class="xc-btn xc-btn-primary">Start Cleaning</button>
+      <button type="button" id="xc-btn-start" class="xc-btn xc-btn-primary">Start cleaning</button>
       <button type="button" id="xc-btn-pause" class="xc-btn xc-btn-secondary" style="display: none;">Pause</button>
-      <button type="button" id="xc-btn-stop" class="xc-btn xc-btn-secondary" style="display: none;">Stop</button>
+      <button type="button" id="xc-btn-stop" class="xc-btn xc-btn-ghost" style="display: none;">Stop</button>
     </div>
+    <div class="xc-footer-note">Destructive — cannot be undone. Review filters above before starting.</div>
   </div>
 </div>
