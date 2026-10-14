@@ -1,5 +1,5 @@
 import { passesFilters } from '../filters.js';
-import { sleep } from '../utils.js';
+import { sleep, findInstructions } from '../utils.js';
 
 const LIKES_FEATURES = {
   rweb_lists_timeline_redesign_enabled: true,
@@ -43,7 +43,7 @@ export async function* scanUserLikes(client, ids, options, onLog) {
     onLog?.('info', 'Scanning likes timeline...');
     const data = await client.get(ids.Likes, 'Likes', variables, LIKES_FEATURES);
 
-    const instructions = data?.data?.user?.result?.timeline_v2?.timeline?.instructions || [];
+    const instructions = findInstructions(data);
     let entries = [];
     for (const inst of instructions) {
       if (inst.type === 'TimelineAddEntries') entries = inst.entries;

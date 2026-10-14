@@ -25,6 +25,4 @@ jobs:
 
       - name: Verify Dist Artifacts
         run: |
-          test -f dist/extension/manifest.json
-          test -f dist/extension/content.js
           test -f dist/xcleaner.user.js

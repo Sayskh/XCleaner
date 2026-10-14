@@ -33,6 +33,21 @@
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+// Timeline envelope depth differs per operation (timeline_v2 vs nested timeline).
+// Find the instructions array instead of hardcoding one path.
+function findInstructions(root, maxDepth = 6) {
+  const walk = (node, depth) => {
+    if (!node || typeof node !== 'object' || depth > maxDepth) return null;
+    if (Array.isArray(node.instructions)) return node.instructions;
+    for (const key of Object.keys(node)) {
+      const found = walk(node[key], depth + 1);
+      if (found) return found;
+    }
+    return null;
+  };
+  return walk(root, 0) || [];
+}
+
 // Native cookie and auth extractor for x.com
 // Zero dependencies, runs directly in browser context
 
@@ -255,21 +270,11 @@ async function* scanUserTweets(client, ids, options, onLog) {
     onLog?.('info', 'Scanning posts timeline...');
     const data = await client.get(ids.UserTweets, 'UserTweets', variables, TWEETS_FEATURES, TWEETS_FIELD_TOGGLES);
 
-    if (cursor === null) {
-      try {
-        onLog?.('warn', 'DEBUG keys: ' + JSON.stringify({
-          root: Object.keys(data || {}),
-          data: Object.keys(data?.data || {}),
-          user: Object.keys(data?.data?.user || {}),
-          result: Object.keys(data?.data?.user?.result || {}),
-          tl: Object.keys(data?.data?.user?.result?.timeline_v2?.timeline || data?.data?.user?.result?.timeline || {})
-        }));
-      } catch (e) { /* ignore diagnostic failure */ }
+    const instructions = findInstructions(data);
+    if (instructions.length === 0 && cursor === null) {
+      onLog?.('warn', 'DEBUG no instructions, result keys: '
+        + JSON.stringify(Object.keys(data?.data?.user?.result || {})));
     }
-
-    const instructions = data?.data?.user?.result?.timeline_v2?.timeline?.instructions
-      || data?.data?.user?.result?.timeline?.instructions
-      || [];
     let entries = [];
     for (const inst of instructions) {
       if (inst.type === 'TimelineAddEntries') entries = inst.entries;
@@ -395,7 +400,7 @@ async function* scanUserLikes(client, ids, options, onLog) {
     onLog?.('info', 'Scanning likes timeline...');
     const data = await client.get(ids.Likes, 'Likes', variables, LIKES_FEATURES);
 
-    const instructions = data?.data?.user?.result?.timeline_v2?.timeline?.instructions || [];
+    const instructions = findInstructions(data);
     let entries = [];
     for (const inst of instructions) {
       if (inst.type === 'TimelineAddEntries') entries = inst.entries;

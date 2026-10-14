@@ -1,5 +1,5 @@
 import { passesFilters } from '../filters.js';
-import { sleep } from '../utils.js';
+import { sleep, findInstructions } from '../utils.js';
 
 const TWEETS_FEATURES = {
   rweb_video_screen_enabled: false,
@@ -66,21 +66,11 @@ export async function* scanUserTweets(client, ids, options, onLog) {
     onLog?.('info', 'Scanning posts timeline...');
     const data = await client.get(ids.UserTweets, 'UserTweets', variables, TWEETS_FEATURES, TWEETS_FIELD_TOGGLES);
 
-    if (cursor === null) {
-      try {
-        onLog?.('warn', 'DEBUG keys: ' + JSON.stringify({
-          root: Object.keys(data || {}),
-          data: Object.keys(data?.data || {}),
-          user: Object.keys(data?.data?.user || {}),
-          result: Object.keys(data?.data?.user?.result || {}),
-          tl: Object.keys(data?.data?.user?.result?.timeline_v2?.timeline || data?.data?.user?.result?.timeline || {})
-        }));
-      } catch (e) { /* ignore diagnostic failure */ }
+    const instructions = findInstructions(data);
+    if (instructions.length === 0 && cursor === null) {
+      onLog?.('warn', 'DEBUG no instructions, result keys: '
+        + JSON.stringify(Object.keys(data?.data?.user?.result || {})));
     }
-
-    const instructions = data?.data?.user?.result?.timeline_v2?.timeline?.instructions
-      || data?.data?.user?.result?.timeline?.instructions
-      || [];
     let entries = [];
     for (const inst of instructions) {
       if (inst.type === 'TimelineAddEntries') entries = inst.entries;

@@ -1,13 +1,12 @@
-// Bundler: compiles src into dist/extension and dist/xcleaner.user.js
+// Bundler: compiles src into dist/xcleaner.user.js
 import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname || process.cwd());
 const DIST = path.join(ROOT, 'dist');
-const DIST_EXT = path.join(DIST, 'extension');
 
 fs.rmSync(DIST, { recursive: true, force: true });
-fs.mkdirSync(DIST_EXT, { recursive: true });
+fs.mkdirSync(DIST, { recursive: true });
 
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 
@@ -38,12 +37,6 @@ const bundle = `(() => {
 ${modules.map(m => strip(read(m))).join('\n\n')}
 })();`;
 
-// 1. Extension output
-fs.writeFileSync(path.join(DIST_EXT, 'manifest.json'), read('src/extension/manifest.json'), 'utf8');
-fs.writeFileSync(path.join(DIST_EXT, 'content.js'), bundle, 'utf8');
-fs.writeFileSync(path.join(DIST_EXT, 'panel.css'), read('src/ui/panel.css'), 'utf8');
-
-// 2. Userscript output
 fs.writeFileSync(path.join(DIST, 'xcleaner.user.js'), `${read('src/userscript/header.js').trim()}\n\n${bundle}\n`, 'utf8');
 
-console.log('Build done: dist/extension/ + dist/xcleaner.user.js');
+console.log('Build done: dist/xcleaner.user.js');
