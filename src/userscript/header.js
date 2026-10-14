@@ -11,6 +11,8 @@
 // @run-at       document-idle
 // @connect      x.com
 // @connect      twitter.com
+// @homepageURL  https://github.com/Sayskh/XCleaner
+// @supportURL   https://github.com/Sayskh/XCleaner/issues
 // @updateURL    https://raw.githubusercontent.com/Sayskh/XCleaner/main/dist/xcleaner.user.js
 // @downloadURL  https://raw.githubusercontent.com/Sayskh/XCleaner/main/dist/xcleaner.user.js
 // ==/UserScript==

@@ -4,6 +4,8 @@ In-page floating tool to bulk delete your posts, undo reposts, and unlike tweets
 
 No DevTools, no token copying, no external servers. Everything runs inside your browser session on the account you are logged into.
 
+Also on [Greasy Fork](https://greasyfork.org/en/scripts/600152-xcleaner).
+
 ## Before you use this
 
 Deletion is final. X gives you no way to restore a deleted post, an undone repost, or a removed like. Once it is gone, it is gone.
@@ -48,17 +50,19 @@ After install, you will see the manager icon in your toolbar.
 
 ### 2. Install XCleaner
 
-1. Open this link: [xcleaner.user.js](https://raw.githubusercontent.com/Sayskh/XCleaner/main/dist/xcleaner.user.js)
-2. Your manager will open an install page. Click **Install**.
-3. If no prompt appears, open the manager Dashboard > Utilities > Import from URL, paste the link above, then Install.
+Recommended: install from [Greasy Fork](https://greasyfork.org/en/scripts/600152-xcleaner) - click Install this script.
 
-The manager keeps XCleaner updated automatically from that same URL.
+Alternative, direct from GitHub: [xcleaner.user.js](https://raw.githubusercontent.com/Sayskh/XCleaner/main/dist/xcleaner.user.js) - open the link, your manager will prompt Install. If no prompt appears, open the manager Dashboard > Utilities > Import from URL, paste the link, then Install.
+
+Either way the manager keeps XCleaner updated automatically.
 
 ### 3. Use it
 
 1. Open [x.com](https://x.com) and log in.
 2. A floating `XC` button appears at the bottom-right.
 3. Click it to open the panel, pick what to clean, and start.
+
+Source and issue tracking live on GitHub: https://github.com/Sayskh/XCleaner
 
 ## Development
 
