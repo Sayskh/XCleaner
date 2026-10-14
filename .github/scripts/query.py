@@ -8,7 +8,11 @@ from pathlib import Path
 # ponytail: fa0311 is a bot that scrapes x.com JS bundles daily. If it goes stale,
 # add nirholas/XActions as fallback source (regex on its generated JS file).
 SOURCE_URL = "https://raw.githubusercontent.com/fa0311/TwitterInternalAPIDocument/develop/docs/json/GraphQL.json"
-OPS = ["UserTweetsAndReplies", "DeleteTweet", "DeleteRetweet", "Likes", "UnfavoriteTweet"]
+# Only mutations are synced from upstream. Timeline query IDs (UserTweets,
+# UserRepliesTimeline) are pinned from the live bundle because upstream scrapes
+# a bundle variant whose IDs do not match what a logged-in client uses, and a
+# bad sync there reintroduces 404s. Pin those manually when they rotate.
+OPS = ["DeleteTweet", "DeleteRetweet", "UnfavoriteTweet"]
 
 try:
     req = urllib.request.Request(SOURCE_URL, headers={"User-Agent": "Mozilla/5.0"})
