@@ -1,4 +1,4 @@
-/* XCleaner floating panel — Native Clean. Everything scoped under #xcleaner-root (userscript injection). */
+/* XCleaner floating panel - Native Clean. Everything scoped under #xcleaner-root (userscript injection). */
 #xcleaner-root {
   --xc-bg: #ffffff;
   --xc-fg: #0f1419;
@@ -11,26 +11,28 @@
   --xc-danger: #f4212e;
   --xc-danger-hover: #c81e2b;
   --xc-radius: 8px;
+  --xc-radius-lg: 16px;
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 352px;
+  width: min(352px, calc(100vw - 32px));
   max-height: min(620px, calc(100vh - 96px));
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background: var(--xc-bg);
   border: 1px solid var(--xc-line-strong);
-  border-radius: 16px;
+  border-radius: var(--xc-radius-lg);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
   z-index: 99999;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: var(--xc-fg);
   font-size: 14px;
   line-height: 1.45;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  #xcleaner-root {
+  #xcleaner-root:not([data-xc-theme="light"]) {
     --xc-bg: #000000;
     --xc-fg: #e7e9ea;
     --xc-muted: #71767b;
@@ -39,6 +41,7 @@
     --xc-recess: #16181c;
     --xc-input-bg: #202327;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    color-scheme: dark;
   }
 }
 /* x.com theme (authoritative when detected by mount.js) */
@@ -51,6 +54,7 @@
   --xc-recess: #16181c;
   --xc-input-bg: #202327;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
 }
 #xcleaner-root[data-xc-theme="light"] {
   --xc-bg: #ffffff;
@@ -61,8 +65,12 @@
   --xc-recess: #f7f9f9;
   --xc-input-bg: #ffffff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  color-scheme: light;
 }
 #xcleaner-root *, #xcleaner-root *::before, #xcleaner-root *::after { box-sizing: border-box; }
+
+/* Visibility utility - the ONLY show/hide mechanism (never inline display) */
+#xcleaner-root .xc-hidden { display: none !important; }
 
 /* Header */
 #xcleaner-root .xc-header {
@@ -70,12 +78,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 12px 8px 12px 16px;
+  padding: 10px 8px 10px 16px;
   border-bottom: 1px solid var(--xc-line);
   flex: none;
 }
 #xcleaner-root .xc-header-main { display: flex; flex-direction: column; gap: 0; min-width: 0; }
-#xcleaner-root .xc-title { font-weight: 800; font-size: 15px; line-height: 1.3; letter-spacing: -0.01em; }
+#xcleaner-root .xc-title { font-weight: 700; font-size: 15px; line-height: 1.3; letter-spacing: -0.01em; }
 #xcleaner-root .xc-subtitle { font-size: 12px; color: var(--xc-muted); line-height: 1.4; }
 #xcleaner-root .xc-close {
   width: 32px;
@@ -88,91 +96,92 @@
   color: inherit;
   cursor: pointer;
   border-radius: 9999px;
+  transition: background 0.15s ease;
 }
 #xcleaner-root .xc-close:hover { background: var(--xc-recess); }
+#xcleaner-root .xc-close:active { background: var(--xc-line); }
 
 /* Scrollable body */
 #xcleaner-root .xc-body {
-  padding: 16px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   overflow-y: auto;
   min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--xc-line-strong) transparent;
 }
+#xcleaner-root .xc-body::-webkit-scrollbar { width: 6px; }
+#xcleaner-root .xc-body::-webkit-scrollbar-thumb { background: var(--xc-line-strong); border-radius: 9999px; }
+#xcleaner-root .xc-body::-webkit-scrollbar-track { background: transparent; }
 
-/* Sections */
-#xcleaner-root .xc-section { border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+/* Sections - quiet sentence-case headers, no shouting */
+#xcleaner-root .xc-section { border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 #xcleaner-root .xc-section-title {
   padding: 0;
-  margin: 0 0 -4px;
+  margin: 0;
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-weight: 600;
   color: var(--xc-muted);
 }
-#xcleaner-root div.xc-section-title { margin: 0 0 -4px; }
 #xcleaner-root .xc-divider { border: none; border-top: 1px solid var(--xc-line); margin: 0; }
 
-/* Checkbox rows — primary targets get two-line rows, guardrails stay single-line */
+/* Checkbox rows - single-line, hairline separated */
 #xcleaner-root .xc-check-stack { display: flex; flex-direction: column; }
 #xcleaner-root .xc-check {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 8px 0;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
   cursor: pointer;
   border-top: 1px solid var(--xc-line);
 }
-#xcleaner-root .xc-check:first-child { border-top: none; padding-top: 0; }
-#xcleaner-root .xc-check:last-child { padding-bottom: 0; }
+#xcleaner-root .xc-check:first-child { border-top: none; padding-top: 2px; }
+#xcleaner-root .xc-check:last-child { padding-bottom: 2px; }
 #xcleaner-root .xc-check input {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   flex: none;
-  margin: 1px 0 0;
+  margin: 0;
   accent-color: var(--xc-fg);
   cursor: pointer;
 }
-#xcleaner-root .xc-check-text { display: flex; flex-direction: column; gap: 0; min-width: 0; }
-#xcleaner-root .xc-check-label { font-size: 14px; font-weight: 500; line-height: 1.35; }
-#xcleaner-root .xc-check-hint { font-size: 12px; color: var(--xc-muted); line-height: 1.4; }
-#xcleaner-root .xc-check-stack--compact { gap: 0; }
-#xcleaner-root .xc-check--simple { align-items: center; padding: 6px 0; }
-#xcleaner-root .xc-check--simple input { margin: 0; }
+#xcleaner-root .xc-check-label { font-size: 14px; font-weight: 400; line-height: 1.35; min-width: 0; }
 
 /* Fields */
 #xcleaner-root .xc-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 #xcleaner-root .xc-field-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
 #xcleaner-root .xc-field-label { font-size: 13px; font-weight: 600; }
-#xcleaner-root .xc-field-optional { font-size: 12px; color: var(--xc-muted); }
-#xcleaner-root .xc-field-desc, #xcleaner-root .xc-hint { font-size: 12px; color: var(--xc-muted); line-height: 1.4; }
+#xcleaner-root .xc-field-optional { font-size: 12px; font-weight: 400; color: var(--xc-muted); }
+#xcleaner-root .xc-hint { font-size: 12px; color: var(--xc-muted); line-height: 1.4; }
 
-/* Date range — labelled pair */
+/* Date range - labelled pair */
 #xcleaner-root .xc-date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 #xcleaner-root .xc-date-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-#xcleaner-root .xc-date-label { font-size: 12px; font-weight: 600; color: var(--xc-muted); }
+#xcleaner-root .xc-date-label { font-size: 12px; font-weight: 500; color: var(--xc-muted); }
 
-/* Inputs — consistent 40px control height */
+/* Inputs - consistent 40px control height */
 #xcleaner-root .xc-input {
   width: 100%;
+  min-width: 0;
   min-height: 40px;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: 1px solid var(--xc-line-strong);
   border-radius: var(--xc-radius);
   background: var(--xc-input-bg);
   color: var(--xc-fg);
   font-size: 14px;
   font-family: inherit;
-  color-scheme: light;
 }
-#xcleaner-root[data-xc-theme="dark"] .xc-input { color-scheme: dark; }
+/* Native date picker follows the panel theme via color-scheme on #xcleaner-root */
+#xcleaner-root .xc-input::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.55; }
+#xcleaner-root[data-xc-theme="dark"] .xc-input::-webkit-calendar-picker-indicator { filter: invert(1); }
 @media (prefers-color-scheme: dark) {
-  #xcleaner-root:not([data-xc-theme="light"]) .xc-input { color-scheme: dark; }
+  #xcleaner-root:not([data-xc-theme="light"]) .xc-input::-webkit-calendar-picker-indicator { filter: invert(1); }
 }
 
-/* Focus — visible everywhere */
+/* Focus - visible everywhere */
 #xcleaner-root .xc-close:focus-visible,
 #xcleaner-root .xc-btn:focus-visible,
 #xcleaner-root .xc-input:focus-visible,
@@ -182,23 +191,23 @@
   outline-offset: 2px;
 }
 
-/* Progress */
+/* Progress - stats may wrap on narrow panels */
 #xcleaner-root .xc-progress { display: flex; flex-direction: column; gap: 8px; }
-#xcleaner-root .xc-progress-head { display: flex; justify-content: space-between; gap: 8px; }
+#xcleaner-root .xc-progress-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 8px; }
 #xcleaner-root .xc-progress-stat { font-size: 12px; color: var(--xc-muted); font-variant-numeric: tabular-nums; }
-#xcleaner-root .xc-progress-bar { height: 6px; background: var(--xc-line); border-radius: 9999px; overflow: hidden; }
+#xcleaner-root .xc-progress-bar { height: 4px; background: var(--xc-line); border-radius: 9999px; overflow: hidden; }
 #xcleaner-root .xc-progress-fill { height: 100%; width: 0; background: var(--xc-accent); border-radius: inherit; transition: width 0.3s ease; }
 
-/* Log — collapsed by default, visually recessed */
+/* Log - collapsed by default, visually recessed */
 #xcleaner-root .xc-log-group { border: none; margin: 0; padding: 0; }
 #xcleaner-root .xc-log-summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 4px 0;
+  padding: 2px 0;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--xc-muted);
   cursor: pointer;
   list-style: none;
@@ -214,10 +223,12 @@
   background: var(--xc-recess);
   border: 1px solid var(--xc-line);
   border-radius: var(--xc-radius);
-  padding: 8px 12px;
-  margin-top: 4px;
-  max-height: 120px;
+  padding: 8px 10px;
+  margin-top: 6px;
+  height: 112px; /* fixed box: appending while scrolled/collapsed never resizes layout */
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--xc-line-strong) transparent;
   font-size: 12px;
   line-height: 1.5;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -225,8 +236,10 @@
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+#xcleaner-root .xc-log::-webkit-scrollbar { width: 6px; }
+#xcleaner-root .xc-log::-webkit-scrollbar-thumb { background: var(--xc-line-strong); border-radius: 9999px; }
 
-/* Pinned footer — primary action never scrolls away */
+/* Pinned footer - primary action never scrolls away */
 #xcleaner-root .xc-footer {
   flex: none;
   border-top: 1px solid var(--xc-line);
@@ -245,7 +258,8 @@
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  padding: 0 20px;
+  padding: 0 16px;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
 }
 #xcleaner-root .xc-btn-primary { flex: 1; background: var(--xc-danger); color: #ffffff; }
 #xcleaner-root .xc-btn-primary:hover { background: var(--xc-danger-hover); }
@@ -257,33 +271,41 @@
   border-color: var(--xc-line-strong);
   color: var(--xc-fg);
 }
+#xcleaner-root .xc-btn-secondary:hover { background: var(--xc-recess); }
 #xcleaner-root .xc-btn-ghost {
   flex: 1;
   background: transparent;
   border-color: var(--xc-line-strong);
   color: var(--xc-danger);
 }
+#xcleaner-root .xc-btn-ghost:hover { background: var(--xc-recess); border-color: var(--xc-danger); }
 #xcleaner-root .xc-footer-note { font-size: 12px; color: var(--xc-muted); text-align: center; line-height: 1.4; }
 
-/* Status banner */
-#xcleaner-root .xc-status { padding: 8px 12px; border-radius: var(--xc-radius); font-size: 13px; line-height: 1.4; }
-#xcleaner-root .xc-status--rate { background: #fff3cd; color: #664d03; }
-@media (prefers-color-scheme: dark) {
-  #xcleaner-root:not([data-xc-theme="light"]) .xc-status--rate { background: #332701; color: #ffd54d; }
+/* Status banner - hairline + tint, reads as x.com pill, not bootstrap alert */
+#xcleaner-root .xc-status {
+  padding: 8px 12px;
+  border-radius: var(--xc-radius);
+  border: 1px solid transparent;
+  font-size: 13px;
+  line-height: 1.4;
 }
-#xcleaner-root[data-xc-theme="dark"] .xc-status--rate { background: #332701; color: #ffd54d; }
-#xcleaner-root .xc-status--error { background: #fdd9d7; color: #5f2120; }
+#xcleaner-root .xc-status--rate { background: #fff3cd; border-color: #f5e0a3; color: #664d03; }
 @media (prefers-color-scheme: dark) {
-  #xcleaner-root:not([data-xc-theme="light"]) .xc-status--error { background: #3a1211; color: #f28b82; }
+  #xcleaner-root:not([data-xc-theme="light"]) .xc-status--rate { background: #332701; border-color: #5c4701; color: #ffd54d; }
 }
-#xcleaner-root[data-xc-theme="dark"] .xc-status--error { background: #3a1211; color: #f28b82; }
-#xcleaner-root .xc-status--success { background: #d1e7dd; color: #0a3622; }
+#xcleaner-root[data-xc-theme="dark"] .xc-status--rate { background: #332701; border-color: #5c4701; color: #ffd54d; }
+#xcleaner-root .xc-status--error { background: #fdd9d7; border-color: #f5b9b5; color: #5f2120; }
 @media (prefers-color-scheme: dark) {
-  #xcleaner-root:not([data-xc-theme="light"]) .xc-status--success { background: #0a2e1f; color: #81c995; }
+  #xcleaner-root:not([data-xc-theme="light"]) .xc-status--error { background: #3a1211; border-color: #5f1f1d; color: #f28b82; }
 }
-#xcleaner-root[data-xc-theme="dark"] .xc-status--success { background: #0a2e1f; color: #81c995; }
+#xcleaner-root[data-xc-theme="dark"] .xc-status--error { background: #3a1211; border-color: #5f1f1d; color: #f28b82; }
+#xcleaner-root .xc-status--success { background: #d1e7dd; border-color: #a3cfbb; color: #0a3622; }
+@media (prefers-color-scheme: dark) {
+  #xcleaner-root:not([data-xc-theme="light"]) .xc-status--success { background: #0a2e1f; border-color: #14532d; color: #81c995; }
+}
+#xcleaner-root[data-xc-theme="dark"] .xc-status--success { background: #0a2e1f; border-color: #14532d; color: #81c995; }
 
-/* FAB trigger — ID-scoped, monochrome, matches panel */
+/* FAB trigger - ID-scoped, monochrome, matches panel */
 #xcleaner-fab {
   position: fixed;
   bottom: 24px;
@@ -300,7 +322,14 @@
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   padding: 0;
+  transition: transform 0.15s ease, background 0.15s ease;
 }
 #xcleaner-fab:hover { background: #000000; transform: scale(1.04); }
 #xcleaner-fab:active { transform: scale(0.98); }
 #xcleaner-fab:focus-visible { outline: 2px solid #1d9bf0; outline-offset: 2px; }
+
+/* Narrow viewports (<=384px): hug edges, keep 16px gutters */
+@media (max-width: 384px) {
+  #xcleaner-root { bottom: 16px; right: 16px; max-height: calc(100vh - 32px); }
+  #xcleaner-fab { bottom: 16px; right: 16px; }
+}

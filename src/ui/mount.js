@@ -27,6 +27,8 @@ function injectFloatingUI() {
   fab.type = 'button';
   fab.setAttribute('aria-label', 'Open XCleaner');
   fab.setAttribute('aria-expanded', 'false');
+  // CSS sets display:grid; remember it so we can restore after hiding
+  const FAB_DISPLAY = 'grid';
   fab.innerHTML =
     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
     '<path d="M4 7h16M4 12h10M4 17h16"/><path d="M17 10l4 4M21 10l-4 4"/></svg>';
@@ -47,8 +49,9 @@ function injectFloatingUI() {
   observer.observe(rootEl, { attributes: true, attributeFilter: ['class'] });
 
   fab.addEventListener('click', () => {
-    const open = panel.style.display === 'none';
+    const open = panel.style.display !== 'none' ? false : true;
     panel.style.display = open ? 'flex' : 'none'; // flex preserves pinned footer layout
+    fab.style.display = open ? 'none' : FAB_DISPLAY; // FAB would sit under the panel corner
     fab.setAttribute('aria-expanded', String(open));
   });
 

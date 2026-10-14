@@ -1,8 +1,10 @@
+import { CleanerRunner } from '../core/runner.js';
+import { createClient } from '../core/client.js';
+
 // UI Panel Controller - binds HTML/CSS to CleanerRunner
 // Adheres strictly to antislop: no buzzwords, 3 states, 44px buttons, AA contrast
 
-import { CleanerRunner } from '../core/runner.js';
-import { createClient } from '../core/client.js';
+
 
 export function mountXCleaner(containerEl, ids, options = {}) {
   const panel = containerEl.querySelector('#xcleaner-root');
@@ -17,6 +19,7 @@ export function mountXCleaner(containerEl, ids, options = {}) {
   const progressSection = panel.querySelector('#xc-progress-section');
   const progressSummary = panel.querySelector('#xc-progress-summary');
   const progressActions = panel.querySelector('#xc-progress-actions');
+  const footerNote = panel.querySelector('.xc-footer-note');
 
   // Input elements
   const optPosts = panel.querySelector('#xc-opt-posts');
@@ -39,12 +42,27 @@ export function mountXCleaner(containerEl, ids, options = {}) {
 
   function setBanner(type, message) {
     if (!message) {
-      statusBanner.style.display = 'none';
+      statusBanner.classList.add('xc-hidden');
       return;
     }
     statusBanner.className = `xc-status xc-status--${type}`;
     statusBanner.textContent = message;
-    statusBanner.style.display = 'block';
+  }
+
+  // Single source of truth for idle-to-running control visibility.
+  // Never toggle inline display values - .xc-hidden is the only mechanism.
+  function setControls(running) {
+    btnStart.classList.toggle('xc-hidden', running);
+    btnPause.classList.toggle('xc-hidden', !running);
+    btnStop.classList.toggle('xc-hidden', !running);
+    progressSection.classList.toggle('xc-hidden', !running);
+    footerNote.classList.toggle('xc-hidden', running);
+    if (!running) btnPause.textContent = 'Pause'; // reset stale Resume label
+  }
+
+  function finishRun(bannerType, message) {
+    setControls(false);
+    if (message) setBanner(bannerType, message);
   }
 
   btnClose.addEventListener('click', () => {
@@ -62,10 +80,7 @@ export function mountXCleaner(containerEl, ids, options = {}) {
     logBox.textContent = '';
     const logDetails = logBox.closest('details');
     if (logDetails) logDetails.open = true;
-    progressSection.style.display = 'flex';
-    btnStart.style.display = 'none';
-    btnPause.style.display = 'block';
-    btnStop.style.display = 'block';
+    setControls(true);
 
     const parseIds = whitelistIds.value
       .split(',')
@@ -99,26 +114,17 @@ export function mountXCleaner(containerEl, ids, options = {}) {
           progressSummary.textContent = `Scanned: ${p.counters.scanned}`;
           progressActions.textContent = `Deleted: ${p.counters.deletedPosts} | Unretweeted: ${p.counters.unretweeted} | Unliked: ${p.counters.unliked}`;
           if (p.state === 'done') {
-            setBanner('success', 'Cleaning completed. All matched posts have been removed.');
-            btnStart.style.display = 'block';
-            btnPause.style.display = 'none';
-            btnStop.style.display = 'none';
+            finishRun('success', 'Cleaning completed. All matched posts have been removed.');
           }
         },
         onError: (err) => {
-          setBanner('error', `Error: ${err.message}`);
-          btnStart.style.display = 'block';
-          btnPause.style.display = 'none';
-          btnStop.style.display = 'none';
+          finishRun('error', `Error: ${err.message}`);
         }
       });
 
       await runner.run();
     } catch (err) {
-      setBanner('error', `Failed to start: ${err.message}`);
-      btnStart.style.display = 'block';
-      btnPause.style.display = 'none';
-      btnStop.style.display = 'none';
+      finishRun('error', `Failed to start: ${err.message}`);
     }
   });
 
@@ -135,9 +141,22 @@ export function mountXCleaner(containerEl, ids, options = {}) {
 
   btnStop.addEventListener('click', () => {
     if (runner) runner.stop();
-    btnStart.style.display = 'block';
-    btnPause.style.display = 'none';
-    btnStop.style.display = 'none';
-    setBanner('rate', 'Process stopped.');
+    finishRun('rate', 'Process stopped.');
   });
+}
+
+// Mount logic: injects FAB + panel into x.com page
+// Uses globals: IDS, PANEL_HTML, PANEL_CSS, mountXCleaner (defined by build.js inlining)
+
+function detectTheme() {
+  const cls = document.documentElement.classList;
+  if (cls.contains('dark')) return 'dark';
+  if (cls.contains('light')) return 'light';
+  return null;
+}
+
+function applyTheme(panel) {
+  const theme = detectTheme();
+  if (theme) panel.setAttribute('data-xc-theme', theme);
+  else panel.removeAttribute('data-xc-theme');
 }

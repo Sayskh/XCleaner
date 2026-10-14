@@ -1,9 +1,9 @@
-<!-- XCleaner Floating Panel — Native Clean -->
+<!-- XCleaner Floating Panel - Native Clean -->
 <div id="xcleaner-root" role="dialog" aria-labelledby="xc-title-text" aria-modal="false">
   <div class="xc-header">
     <div class="xc-header-main">
       <div class="xc-title" id="xc-title-text">XCleaner</div>
-      <div class="xc-subtitle">Bulk clean posts · reposts · likes</div>
+      <div class="xc-subtitle">Bulk clean posts, reposts, likes</div>
     </div>
     <button class="xc-close" id="xc-btn-close" aria-label="Close XCleaner panel" type="button">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
@@ -14,39 +14,30 @@
 
   <div class="xc-body">
     <!-- Status -->
-    <div id="xc-status-banner" class="xc-status" style="display: none;" role="status" aria-live="polite"></div>
+    <div id="xc-status-banner" class="xc-status xc-hidden" role="status" aria-live="polite"></div>
 
-    <!-- 01 — What to clean -->
+    <!-- 01 - What to clean -->
     <fieldset class="xc-section">
       <legend class="xc-section-title">What to clean</legend>
       <div class="xc-check-stack">
         <label class="xc-check">
           <input type="checkbox" id="xc-opt-posts" checked>
-          <span class="xc-check-text">
-            <span class="xc-check-label">Delete my posts and replies</span>
-            <span class="xc-check-hint">Includes original posts and replies</span>
-          </span>
+          <span class="xc-check-label">Delete my posts and replies</span>
         </label>
         <label class="xc-check">
           <input type="checkbox" id="xc-opt-unretweet" checked>
-          <span class="xc-check-text">
-            <span class="xc-check-label">Undo reposts</span>
-            <span class="xc-check-hint">Removes your reposts (unretweet)</span>
-          </span>
+          <span class="xc-check-label">Undo reposts</span>
         </label>
         <label class="xc-check">
           <input type="checkbox" id="xc-opt-unlike">
-          <span class="xc-check-text">
-            <span class="xc-check-label">Unlike liked posts</span>
-            <span class="xc-check-hint">Only removes likes, not the posts</span>
-          </span>
+          <span class="xc-check-label">Unlike liked posts</span>
         </label>
       </div>
     </fieldset>
 
     <div class="xc-divider" aria-hidden="true"></div>
 
-    <!-- 02 — Filters -->
+    <!-- 02 - Filters -->
     <div class="xc-section">
       <div class="xc-section-title">Filters</div>
 
@@ -55,7 +46,6 @@
           <span class="xc-field-label">Date range</span>
           <span class="xc-field-optional">optional</span>
         </div>
-        <div class="xc-field-desc">Only posts within this window will be touched. Leave blank for all time.</div>
         <div class="xc-date-grid">
           <label class="xc-date-field" for="xc-date-after">
             <span class="xc-date-label">From</span>
@@ -82,12 +72,12 @@
       <label class="xc-field" for="xc-whitelist-ids">
         <span class="xc-field-label">Keep specific Post IDs</span>
         <input type="text" id="xc-whitelist-ids" class="xc-input" placeholder="1840000000000000000, 1840000000000000001">
-        <span class="xc-hint">Comma-separated. These IDs are never deleted.</span>
+        <span class="xc-hint">Comma-separated - never deleted.</span>
       </label>
     </div>
 
     <!-- Progress -->
-    <div class="xc-progress" id="xc-progress-section" style="display: none;">
+    <div class="xc-progress xc-hidden" id="xc-progress-section">
       <div class="xc-progress-head">
         <span id="xc-progress-summary" class="xc-progress-stat">Scanned: 0</span>
         <span id="xc-progress-actions" class="xc-progress-stat">Deleted: 0</span>
@@ -97,7 +87,7 @@
       </div>
     </div>
 
-    <!-- Log — collapsed by default, secondary -->
+    <!-- Log - collapsed by default, secondary -->
     <details class="xc-log-group">
       <summary class="xc-log-summary">
         <span class="xc-log-summary-label">
@@ -110,13 +100,13 @@
     </details>
   </div>
 
-  <!-- Pinned action bar — never scrolls away -->
+  <!-- Pinned action bar - never scrolls away -->
   <div class="xc-footer">
     <div class="xc-actions">
       <button type="button" id="xc-btn-start" class="xc-btn xc-btn-primary">Start cleaning</button>
-      <button type="button" id="xc-btn-pause" class="xc-btn xc-btn-secondary" style="display: none;">Pause</button>
-      <button type="button" id="xc-btn-stop" class="xc-btn xc-btn-ghost" style="display: none;">Stop</button>
+      <button type="button" id="xc-btn-pause" class="xc-btn xc-btn-secondary xc-hidden">Pause</button>
+      <button type="button" id="xc-btn-stop" class="xc-btn xc-btn-ghost xc-hidden">Stop</button>
     </div>
-    <div class="xc-footer-note">Destructive — cannot be undone. Review filters above before starting.</div>
+    <div class="xc-footer-note">Destructive and irreversible.</div>
   </div>
 </div>
