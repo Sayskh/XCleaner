@@ -4,6 +4,7 @@
 // @version      0.1.1
 // @description  Bulk delete posts, unretweet, and unlike on X.com
 // @author       Hio
+// @license      MIT
 // @match        https://x.com/*
 // @match        https://twitter.com/*
 // @grant        none
