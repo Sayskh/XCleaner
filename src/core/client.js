@@ -67,6 +67,7 @@ export function createClient(txIdProvider, onRateLimit, onLog) {
     userId,
     request,
     get: async (queryId, operation, variables, features = {}, fieldToggles = {}) => {
+      if (!queryId) throw new Error(`Missing query ID for ${operation}. Route ID not pinned in ids.json.`);
       const params = new URLSearchParams({
         variables: JSON.stringify(variables),
         features: JSON.stringify(features),
@@ -77,6 +78,7 @@ export function createClient(txIdProvider, onRateLimit, onLog) {
       return res.json();
     },
     post: async (queryId, operation, variables) => {
+      if (!queryId) throw new Error(`Missing query ID for ${operation}. Route ID not pinned in ids.json.`);
       const url = `https://x.com/i/api/graphql/${queryId}/${operation}`;
       const body = JSON.stringify({ variables, queryId });
       const res = await request(url, { method: 'POST', body });

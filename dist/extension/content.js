@@ -150,6 +150,7 @@ function createClient(txIdProvider, onRateLimit, onLog) {
     userId,
     request,
     get: async (queryId, operation, variables, features = {}, fieldToggles = {}) => {
+      if (!queryId) throw new Error(`Missing query ID for ${operation}. Route ID not pinned in ids.json.`);
       const params = new URLSearchParams({
         variables: JSON.stringify(variables),
         features: JSON.stringify(features),
@@ -160,6 +161,7 @@ function createClient(txIdProvider, onRateLimit, onLog) {
       return res.json();
     },
     post: async (queryId, operation, variables) => {
+      if (!queryId) throw new Error(`Missing query ID for ${operation}. Route ID not pinned in ids.json.`);
       const url = `https://x.com/i/api/graphql/${queryId}/${operation}`;
       const body = JSON.stringify({ variables, queryId });
       const res = await request(url, { method: 'POST', body });
@@ -233,7 +235,21 @@ async function* scanUserTweets(client, ids, options, onLog) {
     onLog?.('info', 'Scanning posts timeline...');
     const data = await client.get(ids.UserTweets, 'UserTweets', variables, TWEETS_FEATURES, TWEETS_FIELD_TOGGLES);
 
-    const instructions = data?.data?.user?.result?.timeline_v2?.timeline?.instructions || [];
+    if (cursor === null) {
+      try {
+        onLog?.('warn', 'DEBUG keys: ' + JSON.stringify({
+          root: Object.keys(data || {}),
+          data: Object.keys(data?.data || {}),
+          user: Object.keys(data?.data?.user || {}),
+          result: Object.keys(data?.data?.user?.result || {}),
+          tl: Object.keys(data?.data?.user?.result?.timeline_v2?.timeline || data?.data?.user?.result?.timeline || {})
+        }));
+      } catch (e) { /* ignore diagnostic failure */ }
+    }
+
+    const instructions = data?.data?.user?.result?.timeline_v2?.timeline?.instructions
+      || data?.data?.user?.result?.timeline?.instructions
+      || [];
     let entries = [];
     for (const inst of instructions) {
       if (inst.type === 'TimelineAddEntries') entries = inst.entries;

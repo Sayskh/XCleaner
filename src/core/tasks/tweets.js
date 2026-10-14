@@ -66,7 +66,21 @@ export async function* scanUserTweets(client, ids, options, onLog) {
     onLog?.('info', 'Scanning posts timeline...');
     const data = await client.get(ids.UserTweets, 'UserTweets', variables, TWEETS_FEATURES, TWEETS_FIELD_TOGGLES);
 
-    const instructions = data?.data?.user?.result?.timeline_v2?.timeline?.instructions || [];
+    if (cursor === null) {
+      try {
+        onLog?.('warn', 'DEBUG keys: ' + JSON.stringify({
+          root: Object.keys(data || {}),
+          data: Object.keys(data?.data || {}),
+          user: Object.keys(data?.data?.user || {}),
+          result: Object.keys(data?.data?.user?.result || {}),
+          tl: Object.keys(data?.data?.user?.result?.timeline_v2?.timeline || data?.data?.user?.result?.timeline || {})
+        }));
+      } catch (e) { /* ignore diagnostic failure */ }
+    }
+
+    const instructions = data?.data?.user?.result?.timeline_v2?.timeline?.instructions
+      || data?.data?.user?.result?.timeline?.instructions
+      || [];
     let entries = [];
     for (const inst of instructions) {
       if (inst.type === 'TimelineAddEntries') entries = inst.entries;
