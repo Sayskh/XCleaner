@@ -21,8 +21,9 @@ Works without opening DevTools, inspecting network traffic, or copying authentic
 ### Quick Install (no build step)
 
 1. Open the latest [Release](../../releases/latest).
-2. Download `XCleaner-extension.zip` and extract it anywhere.
-3. Follow the browser-specific step below to load the extracted folder.
+2. Chrome / Edge / Brave: download `XCleaner-extension.zip`, extract anywhere.
+3. Firefox: download `XCleaner.xpi`.
+4. Follow the browser-specific step below.
 
 ### 1. Chromium Browsers (Chrome, Edge, Brave, Opera, Vivaldi)
 
@@ -35,8 +36,10 @@ Works without opening DevTools, inspecting network traffic, or copying authentic
 
 1. Open `about:debugging#/runtime/this-firefox` in Firefox.
 2. Click **Load Temporary Add-on...**
-3. Select `manifest.json` inside the extracted `XCleaner-extension` folder.
+3. Select the downloaded `XCleaner.xpi`, or `manifest.json` inside the extracted `XCleaner-extension` folder.
 4. Open [x.com](https://x.com). The floating `XC` button will appear at the bottom-right.
+
+Temporary add-ons unload when Firefox restarts. Reload it from `about:debugging` after each restart.
 
 ### 3. Userscript (Tampermonkey, Violentmonkey)
 
