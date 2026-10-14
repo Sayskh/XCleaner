@@ -125,7 +125,8 @@ function createClient(txIdProvider, onRateLimit, onLog) {
       if (response.ok) return response;
 
       if (response.status === 404) {
-        throw new Error('Query ID is outdated. Please wait for auto-sync or update ids.json manually.');
+        const body = await response.text().catch(() => '');
+        throw new Error(`Query ID or operation name is stale. Request: ${url} Response: ${body.slice(0, 300)}`);
       }
 
       if (response.status === 429) {
@@ -137,7 +138,7 @@ function createClient(txIdProvider, onRateLimit, onLog) {
         continue;
       }
 
-      if (retry >= maxRetries) throw new Error(`Network error: ${response.status} ${response.statusText}`);
+      if (retry >= maxRetries) throw new Error(`Network error: ${response.status} ${response.statusText} on ${url}`);
       retry++;
       const backoff = 10000 * retry;
       onLog?.('warn', `Request failed (${response.status}). Retrying in ${backoff / 1000}s...`);
