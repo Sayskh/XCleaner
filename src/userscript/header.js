@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         XCleaner
 // @namespace    https://github.com/Sayskh/XCleaner
-// @version      0.1.0
+// @version      0.1.1
 // @description  Bulk delete posts, unretweet, and unlike on X.com
 // @author       Sayskh
 // @match        https://x.com/*
