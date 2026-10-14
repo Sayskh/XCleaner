@@ -3,7 +3,7 @@
 // @namespace    https://github.com/Sayskh/XCleaner
 // @version      0.1.1
 // @description  Bulk delete posts, unretweet, and unlike on X.com
-// @author       Sayskh
+// @author       Hio
 // @match        https://x.com/*
 // @match        https://twitter.com/*
 // @grant        none

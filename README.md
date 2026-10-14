@@ -80,7 +80,7 @@ Big thanks to Lyfhael. XCleaner exists because these two scripts came first:
 * [DeleteTweets](https://github.com/Lyfhael/DeleteTweets)
 * [UnlikeAllTweets](https://github.com/Lyfhael/UnlikeAllTweets)
 
-XCleaner builds on that work. The original MIT license text is carried in [LICENSE](LICENSE), covering Lyfhael (2023) and Sayskh (2026).
+XCleaner builds on that work. The original MIT license text is carried in [LICENSE](LICENSE), covering Lyfhael (2023) and Hio (2026).
 
 ## License
 
