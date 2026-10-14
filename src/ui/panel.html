@@ -1,0 +1,82 @@
+<!-- Vanilla Floating Panel Template for XCleaner -->
+<div id="xcleaner-root" role="dialog" aria-labelledby="xc-title-text" aria-modal="false">
+  <div class="xc-header">
+    <div class="xc-title" id="xc-title-text">XCleaner</div>
+    <button class="xc-close" id="xc-btn-close" aria-label="Close XCleaner panel" type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M10.59 12L5 6.41 6.41 5 12 10.59 17.59 5 19 6.41 13.41 12 19 17.59 17.59 19 12 13.41 6.41 19 5 17.59 10.59 12z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="xc-body">
+    <!-- State notice (Empty / Rate limit / Error / Success) -->
+    <div id="xc-status-banner" class="xc-status" style="display: none;" role="status" aria-live="polite"></div>
+
+    <!-- Target Action Selector -->
+    <fieldset class="xc-group" style="border: none; padding: 0; margin: 0;">
+      <legend class="xc-label">Items to Clean</legend>
+      <label class="xc-checkbox">
+        <input type="checkbox" id="xc-opt-posts" checked>
+        <span>Delete my posts and replies</span>
+      </label>
+      <label class="xc-checkbox">
+        <input type="checkbox" id="xc-opt-unretweet" checked>
+        <span>Undo reposts (unretweet)</span>
+      </label>
+      <label class="xc-checkbox">
+        <input type="checkbox" id="xc-opt-unlike">
+        <span>Unlike liked posts</span>
+      </label>
+    </fieldset>
+
+    <!-- Filters -->
+    <div class="xc-group">
+      <label class="xc-label" for="xc-date-after">Date Range (Optional)</label>
+      <div style="display: flex; gap: 8px;">
+        <input type="date" id="xc-date-after" class="xc-input" aria-label="Only after date">
+        <input type="date" id="xc-date-before" class="xc-input" aria-label="Only before date">
+      </div>
+    </div>
+
+    <div class="xc-group">
+      <label class="xc-checkbox">
+        <input type="checkbox" id="xc-opt-pinned" checked>
+        <span>Keep pinned post safe</span>
+      </label>
+      <label class="xc-checkbox">
+        <input type="checkbox" id="xc-opt-urlonly">
+        <span>Only delete posts with links or media</span>
+      </label>
+    </div>
+
+    <div class="xc-group">
+      <label class="xc-label" for="xc-whitelist-ids">Keep specific Post IDs (Comma-separated)</label>
+      <input type="text" id="xc-whitelist-ids" class="xc-input" placeholder="1840000000000000000, 1840000000000000001">
+    </div>
+
+    <!-- Progress indicator -->
+    <div class="xc-progress" id="xc-progress-section" style="display: none;">
+      <div style="display: flex; justify-content: space-between; font-size: 12px;">
+        <span id="xc-progress-summary">Scanned: 0</span>
+        <span id="xc-progress-actions">Deleted: 0</span>
+      </div>
+      <div class="xc-progress-bar">
+        <div class="xc-progress-fill" id="xc-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Execution log -->
+    <div class="xc-group">
+      <label class="xc-label" for="xc-log-box">Activity Log</label>
+      <div id="xc-log-box" class="xc-log" role="log" aria-live="polite">Ready. Choose options and click Start.</div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="xc-actions">
+      <button type="button" id="xc-btn-start" class="xc-btn xc-btn-primary">Start Cleaning</button>
+      <button type="button" id="xc-btn-pause" class="xc-btn xc-btn-secondary" style="display: none;">Pause</button>
+      <button type="button" id="xc-btn-stop" class="xc-btn xc-btn-secondary" style="display: none;">Stop</button>
+    </div>
+  </div>
+</div>

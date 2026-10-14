@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "XCleaner",
+  "version": "0.1.0",
+  "description": "Bulk delete posts, unretweet, and unlike on X.com with a floating panel.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://x.com/*",
+    "https://twitter.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://x.com/*", "https://twitter.com/*"],
+      "js": ["content.js"],
+      "css": ["panel.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; connect-src https://x.com https://api.x.com; script-src 'self'; object-src 'none'"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "xcleaner@sayskh.github.io",
+      "strict_min_version": "109.0"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+name: Sync X GraphQL Query IDs
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-ids:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Check and update query IDs
+        run: python3 .github/scripts/query.py
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Rebuild bundles if IDs changed
+        run: |
+          if [ -n "$(git status --porcelain src/core/ids.json)" ]; then
+            node build.js
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add src/core/ids.json dist/
+            git commit -m "chore(core): auto-sync X GraphQL query IDs [skip ci]"
+            git push
+          else
+            echo "No changes detected. src/core/ids.json is up to date."
+          fi
