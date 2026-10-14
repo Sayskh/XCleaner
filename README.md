@@ -23,12 +23,12 @@ Works without opening DevTools, inspecting network traffic, or copying authentic
 Pick one. Violentmonkey is open source, Tampermonkey is most popular. Both work.
 
 **Chrome / Edge / Brave / Opera:**
-* Tampermonkey: https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo
-* Violentmonkey: https://chrome.google.com/webstore/detail/violentmonkey/jinjaccalgkegednnccohejagnlatuglb
+* [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+* [Violentmonkey](https://chrome.google.com/webstore/detail/violentmonkey/jinjaccalgkegednnccohejagnlatuglb)
 
 **Firefox:**
-* Tampermonkey: https://addons.mozilla.org/firefox/addon/tampermonkey/
-* Violentmonkey: https://addons.mozilla.org/firefox/addon/violentmonkey/
+* [Tampermonkey](https://addons.mozilla.org/firefox/addon/tampermonkey/)
+* [Violentmonkey](https://addons.mozilla.org/firefox/addon/violentmonkey/)
 
 **Safari:** Install Userscripts from the App Store, then enable it in Settings > Extensions.
 
@@ -38,7 +38,7 @@ After install, you will see the manager icon in your toolbar.
 
 ### 2. Install XCleaner
 
-1. Open this link: https://raw.githubusercontent.com/Sayskh/XCleaner/main/dist/xcleaner.user.js
+1. Open this link: [xcleaner.user.js](https://raw.githubusercontent.com/Sayskh/XCleaner/main/dist/xcleaner.user.js)
 2. Your manager will open an install page. Click **Install**.
 3. If no prompt appears, open the manager Dashboard > Utilities > Import from URL, paste the link above, then Install.
 
@@ -46,7 +46,7 @@ The manager will keep XCleaner updated automatically.
 
 ### 3. Use it
 
-1. Open https://x.com and log in.
+1. Open [x.com](https://x.com) and log in.
 2. A floating `XC` button appears at the bottom-right.
 3. Click it to open the panel, pick what to clean, and start.
 

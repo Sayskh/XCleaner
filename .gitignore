@@ -1,4 +1,4 @@
-# Build output (kept tracked for release convenience)
+# Build output (tracked so CI and raw URL install work)
 # dist/
 
 # Dependencies
