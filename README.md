@@ -8,7 +8,7 @@ No DevTools, no token copying, no external servers. Everything runs inside your 
 
 Deletion is final. X gives you no way to restore a deleted post, an undone repost, or a removed like. Once it is gone, it is gone.
 
-XCleaner only acts on the account currently logged in in your browser. You choose the filters, you press start, and you are responsible for what gets cleaned. Read the panel options before running a pass.
+XCleaner only acts on the account currently logged in on this browser. You choose the filters, you press start, and you are responsible for what gets cleaned. Read the panel options before running a pass.
 
 X rate limits apply. The script backs off automatically when it hits HTTP 429 and pauses until it can continue. That is expected, not a failure.
 
